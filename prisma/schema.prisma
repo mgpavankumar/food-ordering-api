@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Customers {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  phoneNumber String   @unique
+  address     String
+  Orders      Orders[]
+}
+
+model Restaurants {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  location  String
+  MenuItems MenuItems[]
+  Orders    Orders[]
+}
+
+model MenuItems {
+  id           Int         @id @default(autoincrement())
+  name         String      
+  price        Decimal
+  isAvailable  Boolean     @default(true)
+  restaurant   Restaurants @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurantId Int
+  OrderItem    OrderItem[]
+}
+
+model Orders {
+  id              Int         @id @default(autoincrement())
+  customerId      Int
+  restaurantId    Int
+  status          Status      @default(Placed)
+  totalPrice      Float
+  orderTime       DateTime    @default(now())
+  customers       Customers   @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  restaurants     Restaurants @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  OrderItem       OrderItem[]
+}
+
+model OrderItem {
+  id         Int       @id @default(autoincrement())
+  orderId    Int
+  menuItemId Int
+  quantity   Int
+  order      Orders    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem   MenuItems @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+}
+
+enum Status {
+  Placed
+  Preparing
+  Completed
+  Cancelled
+}
