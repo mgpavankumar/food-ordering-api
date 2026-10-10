@@ -9,7 +9,8 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate deploy",
-    "db:dev": "prisma migrate dev"
+    "db:dev": "prisma migrate dev",
+    "start:production": "node dist/src/index.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.17",

@@ -18,3 +18,13 @@ Tests and repeatable checks are committed in tests/ and .github/workflows/ci.yml
 - Migrations and integration tests ran against an isolated in-memory PGlite database; GitHub CI uses PostgreSQL 16.
 - HTTP safety tests cover streamed payloads, declared content lengths, and chunked payloads with conflicting length headers.
 - Dependency audit checked the complete installed dependency tree.
+
+## Production safeguards — 10 October 2026
+
+- Strict TypeScript build and the complete 12-test suite passed.
+- Fresh migrations passed against an isolated PGlite PostgreSQL database.
+- Compiled production servers passed real HTTP liveness/readiness requests and exited with code 0 on SIGTERM.
+- Tests cover unavailable and timed-out readiness, configuration validation, and production service-key enforcement.
+- Production dependency audit: zero known vulnerabilities. CI now repeats the high/critical production audit.
+
+Local test files ran in separate processes with prepared statements cleared between them because the PGlite wire adapter shares statement state across connections. GitHub CI uses standard PostgreSQL 16 and the normal parallel test command. These results do not establish public launch readiness, load capacity, or a configured production deployment; see PRODUCTION.md.
