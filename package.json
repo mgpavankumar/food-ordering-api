@@ -2,15 +2,32 @@
   "name": "nitrogen",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "start": "node --import tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:dev": "prisma migrate dev"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
-    "@prisma/client": "^6.5.0",
-    "hono": "^4.7.5"
+    "@prisma/client": "6.5.0",
+    "dotenv": "^16.4.7",
+    "hono": "^4.7.5",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@types/node": "^20.11.17",
-    "tsx": "^4.7.1"
-  }
+    "@types/node": "^22.13.10",
+    "prisma": "6.5.0",
+    "tsx": "4.20.6",
+    "typescript": "5.8.2"
+  },
+  "private": true,
+  "author": "M. G. Pavan Kumar",
+  "engines": {
+    "node": ">=22"
+  },
+  "description": "PostgreSQL food ordering API with atomic orders"
 }
