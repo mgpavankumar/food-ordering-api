@@ -1,5 +1,7 @@
 # Food Ordering API · Hono & Prisma
 
+[![CI](https://github.com/mgpavankumar/nitrogen/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mgpavankumar/nitrogen/actions/workflows/ci.yml)
+
 A PostgreSQL-backed food ordering API with validated requests and transactional order creation.
 
 **Author:** [M. G. Pavan Kumar](https://github.com/mgpavankumar)
@@ -51,7 +53,7 @@ See [TEST_RESULTS.md](TEST_RESULTS.md) for recorded local verification and its l
 
 | Path | Purpose |
 | --- | --- |
-| `src/app.ts` | Application logic and/or demonstration |
+| `src/app.ts` | HTTP application, routes, and request validation |
 | `src/index.ts` | Server entry point |
 | `src/prisma.ts` | Application logic and/or demonstration |
 | `tests/` | Automated regression checks |
@@ -82,6 +84,17 @@ This learning API has no authentication or access control. Revenue includes comp
 | PATCH | `/orders/:id/status` |
 | GET | `/restaurants/:id/revenue` |
 | GET | `/menu/top-items` |
+
+## Try the API
+
+Use a local development database:
+
+```bash
+curl -i http://localhost:3000/customers -H 'Content-Type: application/json' -d '{"name":"Demo Customer","email":"demo@example.test","phoneNumber":"synthetic-demo-001","address":"Test address"}'
+curl -i http://localhost:3000/restaurants -H 'Content-Type: application/json' -d '{"name":"Demo Kitchen","location":"Test location"}'
+```
+
+Both successful creations return HTTP 201. Use the returned IDs to add menu items and create orders; [the integration tests](tests/api.test.ts) show the complete sequence, including completed-order revenue. On Windows PowerShell use `curl.exe`.
 
 ## Contributing
 
