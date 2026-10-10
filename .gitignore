@@ -26,3 +26,9 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# Local build and development output
+dist/
+.env
+.env.*
+!.env.example

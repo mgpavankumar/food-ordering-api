@@ -1,54 +1,70 @@
 # Food Ordering API · Hono & Prisma
 
-A PostgreSQL-backed food ordering learning project covering customers, restaurants, menus, orders, and reporting queries.
+A PostgreSQL-backed food ordering API with validated requests and transactional order creation.
 
-**Author:** [M. G. Pavan Kumar](https://github.com/mgpavankumar)  
+**Author:** [M. G. Pavan Kumar](https://github.com/mgpavankumar)
 **Status:** Educational project
 
 ## Features
 
-- Register customers and restaurants
-- Manage menu items, prices, and availability
-- Create orders and update order status
-- Query customer orders, restaurant revenue, and popular items
+- Manage customers, restaurants, menus, and orders
+- Reject unavailable or cross-restaurant items and invalid quantities
+- Create orders and their items atomically
+- Report completed-order revenue and popular items
 
 ## Getting started
 
-Install Node.js and npm. Clone this repository:
+Install Node.js 22 or newer and npm. Clone this repository:
 
 ```bash
 git clone https://github.com/mgpavankumar/nitrogen.git
 cd nitrogen
 ```
 
-For local development, create `.env` in the repository root:
-
-```dotenv
-DATABASE_URL="postgresql://app_user:replace_with_local_password@localhost:5432/nitrogen_dev?schema=public"
+```bash
+npm ci
 ```
 
-Replace the placeholder values with your local PostgreSQL settings. Keep `.env` out of version control.
+Copy `.env.example` to `.env` and set `DATABASE_URL` for a dedicated local PostgreSQL database. Keep `.env` out of version control. Then run:
 
 ```bash
-npm install
-npm exec --package=prisma@6.5.0 -- prisma generate
-npm exec --package=prisma@6.5.0 -- prisma db push
-npm run dev
+npm run db:generate
+npm run db:migrate
+npm run build
+npm start
 ```
+
+`npm start` runs the TypeScript entry point with the Node.js `tsx` loader. `npm run build` emits JavaScript into `dist/src`. `npm run dev` watches source files. The server listens on port 3000 unless `PORT` is set.
+
+## Tests
+
+Use a dedicated test database with the migrations applied. Set `TEST_DATABASE_URL` to its connection URL before running `npm test`. Tests create synthetic records and clean up only their own records. GitHub Actions provisions PostgreSQL 16 and runs migrations, compilation, and tests.
+
+```bash
+npm run typecheck
+npm test
+```
+
+See [TEST_RESULTS.md](TEST_RESULTS.md) for recorded local verification and its limits.
 
 ## Project structure
 
 | Path | Purpose |
 | --- | --- |
-| `src/index.ts` | Customer, restaurant, menu, order, and reporting routes |
-| `src/prisma.ts` | Prisma client export |
-| `prisma/schema.prisma` | Relational models and order status enum |
+| `src/app.ts` | Application logic and/or demonstration |
+| `src/index.ts` | Server entry point |
+| `src/prisma.ts` | Application logic and/or demonstration |
+| `tests/` | Automated regression checks |
+| `tsconfig.json` | Strict ESM compilation settings |
+| `prisma/schema.prisma` | Database models |
+| `prisma/migrations/` | Versioned SQL migrations |
+| `.env.example` | Placeholder local configuration |
 
 ## Current behavior and limitations
 
-Create a local `.env` with `DATABASE_URL` first. Prisma CLI is not declared in package.json, so these commands use a temporary CLI matching the declared Prisma client version. Use a fresh development database for db push; review schema changes before accepting them. Order creation is not transactional and can leave partial records on failure. A menu item is not checked against the selected restaurant, and quantities need stronger validation. The code registers `/customers/top` twice. There is no authentication.
+This learning API has no authentication or access control. Revenue includes completed orders only. Totals are calculated with decimal arithmetic, but the existing database totalPrice column remains a floating-point field. Existing databases previously initialized with db push need the initial migration baselined after confirming the schema matches.
 
-## Routes declared in the source
+## HTTP routes
 
 | Method | Path |
 | --- | --- |
@@ -67,16 +83,6 @@ Create a local `.env` with `DATABASE_URL` first. Prisma CLI is not declared in p
 | GET | `/restaurants/:id/revenue` |
 | GET | `/menu/top-items` |
 
-## Planned improvements
-
-- Add a local Prisma CLI dependency and migrations
-- Create orders atomically with validated quantities and restaurant ownership
-- Remove duplicate routes and add access control
-
 ## Contributing
 
-Open an issue describing the problem or proposed improvement. Keep pull requests focused and include the steps used to verify changes. Use sample data and keep credentials out of commits.
-
-## Verification
-
-This documentation was checked against the committed source files, dependency declarations, and route definitions. Installation, compilation, database setup, and runtime behavior have not been verified by this documentation update. There is no automated test suite in the current repository.
+Keep changes focused, use synthetic data, and include steps or tests demonstrating the fix. Do not commit local configuration or credentials.
