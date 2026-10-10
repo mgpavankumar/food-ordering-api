@@ -1,6 +1,6 @@
 # Food Ordering API · Hono & Prisma
 
-[![CI](https://github.com/mgpavankumar/nitrogen/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mgpavankumar/nitrogen/actions/workflows/ci.yml)
+[![CI](https://github.com/mgpavankumar/food-ordering-api/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/mgpavankumar/food-ordering-api/actions/workflows/ci.yml)
 
 A PostgreSQL-backed food ordering API with validated requests and transactional order creation.
 
@@ -19,8 +19,8 @@ A PostgreSQL-backed food ordering API with validated requests and transactional 
 Install Node.js 22 or newer and npm. Clone this repository:
 
 ```bash
-git clone https://github.com/mgpavankumar/nitrogen.git
-cd nitrogen
+git clone https://github.com/mgpavankumar/food-ordering-api.git
+cd food-ordering-api
 ```
 
 ```bash
